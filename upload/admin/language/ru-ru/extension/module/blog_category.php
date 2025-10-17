@@ -1,11 +1,14 @@
 <?php
-$_['heading_title']    = 'Рубрикатор блога';
+// Heading
+$_['heading_title'] = 'Blog Category';
 
-$_['text_extension']   = 'Дополнения';
-$_['text_success']     = 'Успех: Вы изменили модуль рубрикатора блога!';
-$_['text_edit']        = 'Редактировать модуль рубрикатора блога';
+// Text
+$_['text_extension']   = 'Расширения';
+$_['text_success']     = 'Успех: Вы изменили модуль Blog Category!';
+$_['text_edit']        = 'Редактировать модуль Blog Category';
 
+// Entry
 $_['entry_status']     = 'Статус';
 
-$_['error_permission'] = 'Внимание: У вас нет прав на изменение модуля!';
-?>
+// Error
+$_['error_permission'] = 'Предупреждение: У вас нет прав для изменения модуля Blog Category!';
