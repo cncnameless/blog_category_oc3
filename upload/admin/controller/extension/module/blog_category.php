@@ -81,6 +81,13 @@ class ControllerExtensionModuleBlogCategory extends Controller {
         // Устанавливаем модуль в системе
         $this->load->model('setting/extension');
         $this->model_setting_extension->install('module', 'blog_category');
+
+        // Добавляем запись в таблицу module
+        $this->load->model('setting/module');
+        $this->model_setting_module->addModule('blog_category', array(
+            'name' => 'Blog Category',
+            'status' => 1
+        ));
     }
 
     public function uninstall() {
@@ -93,5 +100,9 @@ class ControllerExtensionModuleBlogCategory extends Controller {
         if (method_exists($this->model_extension_module_blog_category, 'uninstall')) {
             $this->model_extension_module_blog_category->uninstall();
         }
+
+        // Удаляем запись из таблицы module
+        $this->load->model('setting/module');
+        $this->model_setting_module->deleteModulesByCode('blog_category');
     }
 }

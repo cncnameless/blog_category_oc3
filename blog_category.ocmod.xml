@@ -16,9 +16,17 @@
             // Blog
             $blog = array();
 
+            if ($this->user->hasPermission('access', 'catalog/category')) {
+                $blog[] = array(
+                    'name'     => $this->language->get('text_category'),
+                    'href'     => $this->url->link('catalog/category', 'user_token=' . $this->session->data['user_token'], true),
+                    'children' => array()
+                );
+            }
+
             if ($this->user->hasPermission('access', 'extension/module/blog_category')) {
                 $blog[] = array(
-                    'name'     => 'Blog Categories',
+                    'name'     => 'Blog Settings',
                     'href'     => $this->url->link('extension/module/blog_category', 'user_token=' . $this->session->data['user_token'], true),
                     'children' => array()
                 );
@@ -31,6 +39,51 @@
                     'children' => $blog,
                     'icon'     => 'fa-book'
                 );
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ==================== AUTO INSTALL MODULE ==================== -->
+    <file path="admin/controller/startup/login.php">
+        <operation>
+            <search><![CDATA[
+            if ($this->user->isLogged()) {
+            ]]></search>
+            <add position="before"><![CDATA[
+            // Auto-install Blog Category Module
+            $this->load->model('setting/extension');
+            $extensions = $this->model_setting_extension->getInstalled('module');
+            
+            if (!in_array('blog_category', $extensions)) {
+                // Install module in extension list
+                $this->model_setting_extension->install('module', 'blog_category');
+                
+                // Add permissions for admin group
+                $this->load->model('user/user_group');
+                $user_groups = $this->model_user_user_group->getUserGroups();
+                
+                foreach ($user_groups as $user_group) {
+                    if ($user_group['name'] == 'Administrator') {
+                        $this->model_user_user_group->addPermission($user_group['user_group_id'], 'access', 'extension/module/blog_category');
+                        $this->model_user_user_group->addPermission($user_group['user_group_id'], 'modify', 'extension/module/blog_category');
+                    }
+                }
+                
+                // Add module to module table
+                $this->load->model('setting/module');
+                $module_data = array(
+                    'name' => 'Blog Category',
+                    'code' => 'blog_category',
+                    'status' => 1
+                );
+                $this->model_setting_module->addModule('blog_category', $module_data);
+                
+                // Add blog category field to category table if not exists
+                $query = $this->db->query("SHOW COLUMNS FROM `category` LIKE 'blog_category'");
+                if (!$query->num_rows) {
+                    $this->db->query("ALTER TABLE `category` ADD `blog_category` tinyint(1) NOT NULL DEFAULT '0'");
+                }
             }
             ]]></add>
         </operation>
@@ -120,59 +173,6 @@
         </operation>
     </file>
 
-    <!-- ==================== DATABASE MODIFICATIONS ==================== -->
-    <file path="admin/model/design/layout.php">
-        <operation>
-            <search><![CDATA[
-            public function getLayouts($data = array()) {
-            ]]></search>
-            <add position="before"><![CDATA[
-    // Add blog route to layouts
-    public function getLayoutRoutes($layout_id) {
-        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "layout_route WHERE layout_id = '" . (int)$layout_id . "'");
-
-        return $query->rows;
-    }
-            ]]></add>
-        </operation>
-    </file>
-
-    <!-- ==================== BLOG MODULE INSTALLATION ==================== -->
-    <file path="admin/controller/startup/login.php">
-        <operation>
-            <search><![CDATA[
-            if ($this->user->isLogged()) {
-            ]]></search>
-            <add position="before"><![CDATA[
-            // Auto-install Blog Category Module
-            $this->load->model('setting/extension');
-            $extensions = $this->model_setting_extension->getInstalled('module');
-            
-            if (!in_array('blog_category', $extensions)) {
-                // Install module in extension list
-                $this->model_setting_extension->install('module', 'blog_category');
-                
-                // Add permissions for admin group
-                $this->load->model('user/user_group');
-                $user_groups = $this->model_user_user_group->getUserGroups();
-                
-                foreach ($user_groups as $user_group) {
-                    if ($user_group['name'] == 'Administrator') {
-                        $this->model_user_user_group->addPermission($user_group['user_group_id'], 'access', 'extension/module/blog_category');
-                        $this->model_user_user_group->addPermission($user_group['user_group_id'], 'modify', 'extension/module/blog_category');
-                    }
-                }
-                
-                // Add blog category field to category table if not exists
-                $query = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "category` LIKE 'blog_category'");
-                if (!$query->num_rows) {
-                    $this->db->query("ALTER TABLE `" . DB_PREFIX . "category` ADD `blog_category` tinyint(1) NOT NULL DEFAULT '0'");
-                }
-            }
-            ]]></add>
-        </operation>
-    </file>
-
     <!-- ==================== ADMIN CATEGORY FORM MODIFICATIONS ==================== -->
     <file path="admin/controller/catalog/category.php">
         <operation>
@@ -180,7 +180,9 @@
             protected function getForm() {
             ]]></search>
             <add position="after"><![CDATA[
-        $this->document->addScript('view/javascript/blog_category.js');
+        // Blog Category Field
+        $data['text_blog_category'] = $this->language->get('text_blog_category');
+        $data['entry_blog_category'] = $this->language->get('entry_blog_category');
             ]]></add>
         </operation>
         
