@@ -1,14 +1,54 @@
 <?php
 // Heading
-$_['heading_title'] = 'Blog Category';
+$_['heading_title']          = 'Категории блога';
 
 // Text
-$_['text_extension']   = 'Расширения';
-$_['text_success']     = 'Успех: Вы изменили модуль Blog Category!';
-$_['text_edit']        = 'Редактировать модуль Blog Category';
+$_['text_success']           = 'Успех: Вы изменили категории блога!';
+$_['text_list']              = 'Список категорий блога';
+$_['text_add']               = 'Добавить категорию блога';
+$_['text_edit']              = 'Редактировать категорию блога';
+$_['text_default']           = 'По умолчанию';
+$_['text_extension']         = 'Расширения';
+$_['text_enabled']           = 'Включено';
+$_['text_disabled']          = 'Выключено';
+$_['text_home']              = 'Главная';
+$_['text_description']       = 'Модуль Blog Category добавляет функционал блога в OpenCart.';
+
+// Column
+$_['column_name']            = 'Название категории';
+$_['column_sort_order']      = 'Порядок сортировки';
+$_['column_action']          = 'Действие';
 
 // Entry
-$_['entry_status']     = 'Статус';
+$_['entry_name']             = 'Название категории';
+$_['entry_description']      = 'Описание';
+$_['entry_meta_title']       = 'Мета-тег Title';
+$_['entry_meta_keyword']     = 'Мета-тег Keywords';
+$_['entry_meta_description'] = 'Мета-тег Description';
+$_['entry_keyword']          = 'SEO URL';
+$_['entry_parent']           = 'Родительская категория';
+$_['entry_filter']           = 'Фильтры';
+$_['entry_store']            = 'Магазины';
+$_['entry_image']            = 'Изображение';
+$_['entry_top']              = 'Верхнее меню';
+$_['entry_column']           = 'Колонки';
+$_['entry_sort_order']       = 'Порядок сортировки';
+$_['entry_status']           = 'Статус';
+$_['entry_layout']           = 'Переопределение макета';
+$_['entry_blog_category']    = 'Категория блога';
+
+// Help
+$_['help_filter']            = '(Автозаполнение)';
+$_['help_keyword']           = 'Не используйте пробелы, вместо пробелов заменяйте на - и убедитесь, что URL-адрес уникален.';
+$_['help_top']               = 'Отображать в верхнем меню. Работает только для верхних категорий.';
+$_['help_column']            = 'Количество колонок для нижних 3 категорий. Работает только для верхних категорий.';
 
 // Error
-$_['error_permission'] = 'Предупреждение: У вас нет прав для изменения модуля Blog Category!';
+$_['error_warning']          = 'Внимание: Пожалуйста, проверьте форму на наличие ошибок!';
+$_['error_permission']       = 'Внимание: У вас нет прав на изменение категорий блога!';
+$_['error_name']             = 'Название категории должно быть от 1 до 255 символов!';
+$_['error_meta_title']       = 'Мета-тег Title должен быть от 1 до 255 символов!';
+$_['error_keyword']          = 'SEO URL уже используется!';
+$_['error_parent']           = 'Родительская категория, которую вы выбрали, является ребенком текущей!';
+$_['error_unique']           = 'SEO URL должен быть уникальным!';
+?>
